@@ -1,0 +1,11 @@
+@use 'vuetify/settings' with (
+  $color-pack: true
+);
+
+.v-application {
+  background-color: #222;
+  color: #ff75b7;
+  font-family: Roboto, sans-serif;
+}
+
+

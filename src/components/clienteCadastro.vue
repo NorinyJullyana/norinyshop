@@ -18,7 +18,7 @@
             <v-text-field v-model="cliente.email" label="E-mail" type="email"></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
-            <v-checkbox v-model="cliente.ativo" label="Ativo" append-icon="check" ></v-checkbox>
+            <v-checkbox v-model="cliente.ativo" label="Ativo" append-icon="check"></v-checkbox>
           </v-col>
         </v-row>
 
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ClienteCadastro',
   data() {
@@ -48,7 +50,15 @@ export default {
   },
   methods: {
     salvarCliente() {
-      console.log('Cliente salvo:', this.cliente);
+      axios.post('http://localhost:3000/api/clientes', this.cliente)
+        .then(response => {
+          console.log('Cliente salvo:', response.data);
+
+        })
+        .catch(error => {
+          console.error('Erro ao salvar o cliente:', error);
+
+        });
     },
   },
 };

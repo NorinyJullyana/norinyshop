@@ -37,7 +37,7 @@ export default {
 }
 .menu{
   color:#ff75b7;
-    font-size: 18px; /* Ajuste o tamanho da fonte conforme necessário */
+    font-size: 18px;
   font-weight: bold;
 }
 </style>

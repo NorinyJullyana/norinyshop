@@ -24,10 +24,26 @@
 
         <v-row>
           <v-col>
-            <v-btn type="submit" color="#ff75b7">Salvar</v-btn>
+            <v-btn type="submit" color="#ff75b7">
+              {{ clienteAtual ? 'Editar' : 'Salvar' }}
+            </v-btn>
           </v-col>
         </v-row>
       </v-form>
+
+      <h2 class="subtitulo">Lista de Clientes Cadastrados</h2>
+      <v-row>
+        <v-col v-for="cliente in clientes" :key="cliente.id" cols="12" md="4">
+          <v-card>
+            <v-card-title>{{ cliente.nome }}</v-card-title>
+            <v-card-subtitle>Documento: {{ cliente.documento }}</v-card-subtitle>
+            <v-card-subtitle>Telefone: {{ cliente.telefone }}</v-card-subtitle>
+            <v-card-subtitle>E-mail: {{ cliente.email }}</v-card-subtitle>
+            <v-card-subtitle>Ativo: {{ cliente.ativo ? 'Sim' : 'Não' }}</v-card-subtitle>
+            <v-btn @click="editarClienteModoLista(cliente)" color="#ff75b7">Editar</v-btn>
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -45,21 +61,73 @@ export default {
         telefone: '',
         email: '',
         ativo: false,
+        produtos: [{}],
       },
+      clientes: [],
+      clienteAtual: null,
     };
   },
   methods: {
     salvarCliente() {
-      axios.post('http://localhost:3000/api/clientes', this.cliente)
-        .then(response => {
-          console.log('Cliente salvo:', response.data);
+      if (this.clienteAtual) {
+        this.editarCliente();
+      } else {
+        axios.post('http://localhost:3000/api/clientes', this.cliente)
+          .then(response => {
+            console.log('Cliente salvo:', response.data);
+            this.cliente = {
+              nome: '',
+              documento: '',
+              telefone: '',
+              email: '',
+              ativo: false,
+              produtos: [{}],
+            };
+            this.carregarClientes();
+          })
+          .catch(error => {
+            console.error('Erro ao salvar o cliente:', error);
+          });
+      }
+    },
+    editarCliente() {
 
+      if (this.clienteAtual) {
+        axios.put(`http://localhost:3000/api/clientes/${this.clienteAtual.id}`, this.cliente)
+          .then(response => {
+            console.log('Cliente editado:', response.data);
+            this.cliente = {
+              nome: '',
+              documento: '',
+              telefone: '',
+              email: '',
+              ativo: false,
+              produtos: [{}],
+            };
+            this.clienteAtual = null;
+            this.carregarClientes();
+          })
+          .catch(error => {
+            console.error('Erro ao editar o cliente:', error);
+          });
+      }
+    },
+    editarClienteModoLista(cliente) {
+      this.clienteAtual = cliente;
+      this.cliente = { ...cliente };
+    },
+    carregarClientes() {
+      axios.get('http://localhost:3000/api/clientes')
+        .then(response => {
+          this.clientes = response.data;
         })
         .catch(error => {
-          console.error('Erro ao salvar o cliente:', error);
-
+          console.error('Erro ao carregar clientes:', error);
         });
     },
+  },
+  mounted() {
+    this.carregarClientes();
   },
 };
 </script>
@@ -67,5 +135,11 @@ export default {
 <style scoped>
 .titulo {
   font-weight: 700;
+}
+
+.subtitulo {
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 </style>

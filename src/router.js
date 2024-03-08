@@ -13,6 +13,13 @@ const routes = [
     path: '/produto-cadastro',
     component: () => import('./components/produtoCadastro.vue'),
   },
+  {
+    path: '/associar-produtos-cliente',
+    component: () => import('./components/associarProdutosCliente.vue'),
+  },
+
+
+  
 ];
 
 const router = createRouter({

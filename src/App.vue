@@ -1,19 +1,14 @@
-<!-- App.vue -->
 <template>
   <v-app>
+
     <v-app-bar app color="#313030">
+      
       <v-spacer></v-spacer>
-      <router-link to="/">
-        <v-btn text class="menu">Página Inicial</v-btn>
-      </router-link>
 
-      <router-link to="/cliente-cadastro">
-        <v-btn text class="menu">Cadastrar Cliente</v-btn>
-      </router-link>
-
-      <router-link to="/produto-cadastro">
-        <v-btn text class="menu">Cadastrar Produto</v-btn>
-      </router-link>
+      <v-btn v-if="!isMobile" text class="menu" to="/">Página Inicial</v-btn>
+      <v-btn v-if="!isMobile" text class="menu" to="/cliente-cadastro">Cadastrar Cliente</v-btn>
+      <v-btn v-if="!isMobile" text class="menu" to="/produto-cadastro">Cadastrar Produto</v-btn>
+      <v-btn v-if="!isMobile" text class="menu" to="/associar-produtos-cliente">Associar Produtos ao Cliente</v-btn>
     </v-app-bar>
 
     <v-main>
@@ -25,7 +20,17 @@
 <script>
 export default {
   name: 'App',
-  components: {},
+  data() {
+    return {
+      drawer: false,
+    };
+  },
+  computed: {
+    isMobile() {
+
+      return window.innerWidth <= 600;
+    },
+  },
 };
 </script>
 
@@ -35,9 +40,9 @@ export default {
   justify-content: center;
   margin-top: 50px;
 }
-.menu{
-  color:#ff75b7;
-    font-size: 18px;
+.menu {
+  color: #ff75b7;
+  font-size: 18px;
   font-weight: bold;
 }
 </style>
